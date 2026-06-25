@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anura AI Code Reviewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- ANURA RADIANT LIGHT THEME COLORS --- */
+        :root {
+            --bg-dark: #aa83e9;        /* Light Purple/Violet */
+            --bg-card: #e1cef4;        /* Very Light Lavender */
+            --primary-purple: #8a2be2; /* Blue Violet (Accent/Button) */
+            --primary-hover: #6a1aab;  /* Darker Accent */
+            --text-light: #454141;     /* Dark Grey Text */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+
+        .back-button {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Fullscreen Iframe Container */
+        .iframe-container {
+            flex-grow: 1; /* Takes up all remaining space */
+            width: 100%;
+            border: none;
+            overflow: hidden;
+        }
+
+        #code-review-iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Removes the border around the iframe */
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header>
+        <a href="/dashboard" class="logo">Anura | AI Code Reviewer</a>
+        <a href="/dashboard" class="back-button">← Back to Dashboard</a>
+    </header>
+
+    <!-- IFRAME INTEGRATION -->
+    <div class="iframe-container">
+        <iframe 
+            id="code-review-iframe" 
+            src="http://localhost:5173/" 
+            title="External AI Code Review Application"
+        >
+        </iframe>
+    </div>
+
+</body>
+</html>

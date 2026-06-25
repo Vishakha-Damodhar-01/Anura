@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anura Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- ANURA RADIANT DARK THEME --- */
+        :root {
+            --bg-dark: #9d61e6;
+            --bg-card: #e1cef4;
+            --primary-purple: #8a2be2;
+            --primary-hover: #6a1aab;
+            --text-light: #454141;
+            --text-muted: #353434;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 35%, var(--bg-dark) 100%);
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* --- HEADER STYLES --- */
+        header {
+            background-color: rgba(26, 10, 42, 0.9); /* Semi-transparent background */
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            text-shadow: 0 0 5px rgba(138, 43, 226, 0.8);
+        }
+        nav a, .user-info {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: var(--primary-purple);
+        }
+        
+        /* --- BUTTONS --- */
+        .action-button {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin: 5px;
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.4);
+        }
+        .action-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        .logout-btn {
+            background-color: #ff4747;
+        }
+        .logout-btn:hover {
+            background-color: #cc3939;
+        }
+
+        /* --- CONTENT SECTIONS --- */
+        .hero-section {
+            padding: 80px 40px;
+            text-align: center;
+            background-color: var(--bg-dark);
+            border-bottom: 1px solid var(--primary-purple);
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .content-section {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .content-section h2 {
+            text-align: center;
+            color: var(--primary-purple);
+            font-size: 2.5rem;
+            margin-bottom: 20px; /* Reduced margin for search form */
+            text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
+        }
+        
+        /* --- JOB SEARCH FORM STYLES --- */
+        .job-search-form {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            gap: 10px;
+        }
+        .job-search-form input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--primary-purple);
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+        }
+        .job-search-form button {
+            width: auto;
+            padding: 12px 25px;
+            border-radius: 8px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* --- CARD STYLES (Blog/Job/Skill) --- */
+        .grid-container {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .card, .job-listing {
+            background-color: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .card:hover, .job-listing:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.5);
+        }
+        .card h3, .job-listing h3 {
+            color: var(--text-light);
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        .card p, .job-listing p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header>
+        <div class="logo">Anura</div>
+        <nav>
+            <!-- User Email (Assumed to be passed from Express) -->
+            <span class="user-info">Welcome, <%= typeof userEmail !== 'undefined' ? userEmail : 'Guest' %></span>
+            <a href="/logout" class="action-button logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION (AI FEATURE BUTTONS) -->
+    <main class="hero-section">
+        <div class="hero-content">
+            <h1>Anura - Your Intelligent Catalyst System</h1>
+            <p>Your one-stop, voice-enabled solution for career and research enhancement.</p>
+            <div class="button-group">
+                <a href="/analyze-resume"><button class="action-button">AI Resume Parser</button></a>
+                <a href="/quiz-generator"><button class="action-button">AI Quiz Generator</button></a>
+                <a href="/code-review"><button class="action-button">AI Code Review</button></a>
+                <a href="/ai-chatbot"><button class="action-button">AI Chatbot</button></a>
+               
+            </div>
+        </div>
+    </main>
+
+    <!-- JOB OPENINGS SECTION (Dynamic Search Capability) -->
+   <!-- JOB OPENINGS SECTION (Static Profiles) -->
+    <section class="content-section job-section">
+        <h2>Top Recommended Job Roles</h2>
+        
+        <div class="grid-container">
+            
+            <!-- Job Profile 1: Data Engineer -->
+            <a href="https://www.linkedin.com/jobs/search?keywords=Data%20Engineer%20Entry%20Level" 
+               target="_blank" rel="noopener noreferrer" class="job-listing">
+                <h3>Data Engineer (Entry Level)</h3>
+                <p><strong>Company:</strong> Data Pipeline Co. | <strong>Location:</strong> Bengaluru, IN</p>
+            </a>
+            
+            <!-- Job Profile 2: AI/ML Engineer -->
+            <a href="https://www.linkedin.com/jobs/search?keywords=AI%20Engineer%20Remote" 
+               target="_blank" rel="noopener noreferrer" class="job-listing">
+                <h3>AI/ML Engineer (Remote)</h3>
+                <p><strong>Company:</strong> Tech Innovators Global | <strong>Location:</strong> London, UK</p>
+            </a>
+
+            <!-- Job Profile 3: Cybersecurity Analyst -->
+            <a href="https://www.linkedin.com/jobs/search?keywords=Cybersecurity%20Analyst" 
+               target="_blank" rel="noopener noreferrer" class="job-listing">
+                <h3>Cybersecurity Analyst</h3>
+                <p><strong>Company:</strong> SecureNet Defense | <strong>Location:</strong> Seattle, WA</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- BLOG SECTION (Equivalent to BlogSection.js) -->
+  <!-- BLOG SECTION (Now Dynamic) -->
+    <section class="content-section blog-section">
+        <h2>Latest Insights & Blogs</h2>
+        <div class="grid-container">
+            <% 
+            const postsToDisplay = (typeof blogPosts !== 'undefined' && blogPosts.length > 0) ? blogPosts : []; 
+            
+            if (postsToDisplay.length > 0) { %>
+                <% postsToDisplay.forEach(function(post) { %>
+                    <!-- Dynamic Blog Card with working URL -->
+                    <a href="<%= post.url %>" target="_blank" rel="noopener noreferrer" class="card">
+                        <h3><%= post.title %></h3>
+                        <!-- NOTE: The post.body is what you defined as post.excerpt -->
+                        <p><%= post.body %></p> 
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <!-- Fallback Static Placeholders if no dynamic posts are found -->
+                <!-- WRAP STATIC CARD IN AN ANCHOR TAG -->
+                <a href="https://www.kislaypandey.in/2025/04/smarter-job-search-with-retrieval.html" target="_blank" rel="noopener noreferrer" class="card">
+                    <div>
+                        <h3>The Future of RAG in Job Hunting</h3>
+                        <p>Explore how Retrieval-Augmented Generation (RAG) will revolutionize how candidates find and apply for jobs based on resume context.</p>
+                    </div>
+                </a>
+                
+                <a href="https://python.plainenglish.io/python-advanced-modern-typing-patterns-every-developer-should-use-in-2025-e682fb68b426" target="_blank" rel="noopener noreferrer" class="card">
+                    <div>
+                        <h3>Mastering Python: Advanced Techniques</h3>
+                        <p>A deep dive into optimizing Python code for speed and efficiency, straight from our AI Code Reviewer findings.</p>
+                    </div>
+                </a>
+                
+                <a href="https://virtualinterview.ai/interview" target="_blank" rel="noopener noreferrer" class="card">
+                    <div>
+                        <h3>AI Mock Interviews: Beat the Bots</h3>
+                        <p>Learn the secrets to excelling in AI-driven mock interviews, focusing on clarity, sentiment, and technical accuracy.</p>
+                    </div>
+                </a>
+            <% } %>
+        </div>
+    </section>
+    <!-- SKILLS SECTION (Equivalent to SkillsSection.js) -->
+    <section class="content-section skill-section">
+        <h2>Your Skill Snapshot</h2>
+        <div class="grid-container">
+            <div class="card" style="text-align: center;">
+                <h3>Code Review Rating</h3>
+                <p style="font-size: 2rem; color: var(--success-green);">A</p>
+                <p>Optimized for efficiency and complexity.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>Quiz Performance</h3>
+                <p style="font-size: 2rem; color: #ffeb3b;">85%</p>
+                <p>High proficiency in Data Science core concepts.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>Top Skill</h3>
+                <p style="font-size: 2rem; color: var(--primary-purple);">Python</p>
+                <p>Strongest performance detected by AI Parser.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2025 Anura - Intelligent Catalyst System. All rights reserved.
+    </footer>
+    
+</body>
+</html>
+
+

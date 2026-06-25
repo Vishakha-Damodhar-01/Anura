@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anura AI Resume Parser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing Anura Theme Styles */
+        :root {
+            --bg-dark: #100a1a;
+            --primary-purple: #8a2be2;
+            --text-light: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: rgba(26, 10, 42, 0.9);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+        }
+
+        /* Fullscreen Iframe Container */
+        .iframe-container {
+            flex-grow: 1; /* Takes up all remaining space */
+            width: 100%;
+            border: none;
+            overflow: hidden;
+        }
+
+        #resume-iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Removes the border around the iframe */
+        }
+
+        /* Button styling for navigation */
+        .back-button {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-button:hover {
+            background-color: #6a1aab;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header>
+        <div class="logo">Anura | Resume Analyzer</div>
+        <a href="/home" class="back-button">← Back to Dashboard</a>
+    </header>
+
+    <!-- IFRAME INTEGRATION -->
+    <div class="iframe-container">
+        <iframe 
+            id="resume-iframe" 
+            src="http://localhost:8501/" 
+            title="Resume Analyzer App"
+        >
+        </iframe>
+    </div>
+
+</body>
+</html>

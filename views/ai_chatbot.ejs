@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anura AI Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- ANURA RADIANT LIGHT THEME COLORS --- */
+        :root {
+            --bg-dark: #aa83e9;        /* Light Purple/Violet */
+            --bg-card: #e1cef4;        /* Very Light Lavender */
+            --primary-purple: #8a2be2; /* Blue Violet (Accent/Button) */
+            --primary-hover: #6a1aab;  /* Darker Accent */
+            --text-light: #454141;     /* Dark Grey Text */
+            --text-muted: #353434;     /* Very Dark Grey Text */
+            --input-bg-light: #ffffff;
+            --user-bubble: var(--primary-purple);
+            --bot-bubble: #f8f0ff; /* Very light purple/white */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 35%, var(--bg-dark) 100%);
+            background-attachment: fixed;
+            color: var(--text-muted);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* --- HEADER STYLES (Reused from Quiz Generator) --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+        .back-button {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: var(--primary-hover);
+        }
+        /* --- END HEADER STYLES --- */
+
+        .chat-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+        
+        .chat-window {
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--primary-purple);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message-content {
+            padding: 12px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.4;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            color: var(--text-muted);
+        }
+
+        .user-message {
+            justify-content: flex-end;
+            margin-left: auto;
+        }
+
+        .user-message .message-content {
+            background-color: var(--user-bubble); /* Purple for user */
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .bot-message .message-content {
+            background-color: var(--bot-bubble); /* Light background for bot */
+            color: var(--text-muted);
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 1rem;
+            background-color: var(--input-bg-light);
+            color: var(--text-muted);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #send-button {
+            padding: 10px 20px;
+            background-color: var(--primary-purple);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        #send-button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        
+        /* Scrollbar Styles */
+        .chat-messages::-webkit-scrollbar { width: 8px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--primary-purple); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header>
+        <a href="/dashboard" class="logo">Anura | AI Chatbot</a>
+        <a href="/dashboard" class="back-button">← Back to Dashboard</a>
+    </header>
+    
+    <div class="chat-container">
+        <div class="chat-window">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" id="user-input" placeholder="Ask Anura anything about career, code, or tech...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- API CONFIG ---
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent';
+        const API_KEY = 'AIzaSyDjsSQtBb5VWrxhzDy8G5sjBSRDX9G-Xws'; // Placeholder for your Gemini API key
+
+        // --- DOM ELEMENTS ---
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        let chatHistory = []; 
+        
+        // --- Core Gemini API Function ---
+        async function generateResponse(prompt) {
+            
+            // Add user message to history
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = {
+                contents: chatHistory,
+                // Using Google Search for grounding for up-to-date answers
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: "You are Anura, a friendly, professional AI career and tech assistant. Be concise and helpful." }] },
+            };
+
+            const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorDetail = await response.json().catch(() => ({}));
+                console.error("API Error Response:", errorDetail);
+                throw new Error('Failed to generate response from Gemini API.');
+            }
+
+            const data = await response.json();
+            const botText = data.candidates[0].content.parts[0].text;
+            
+            // Add bot response to history
+            chatHistory.push({ role: "model", parts: [{ text: botText }] });
+            
+            return botText;
+        }
+
+        // --- Utility Functions ---
+        function cleanText(text) {
+            // Replaces basic markdown elements for cleaner display
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                       .replace(/\n/g, '<br>');
+        }
+
+        function addMessage(message, isUser) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+
+            const messageContent = document.createElement('div');
+            messageContent.classList.add('message-content');
+            
+            messageContent.innerHTML = cleanText(message);
+
+            messageElement.appendChild(messageContent);
+            chatMessages.appendChild(messageElement);
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // --- Event Handler ---
+        async function handleUserInput() {
+            const userMessage = userInput.value.trim();
+
+            if (!userMessage) return;
+
+            addMessage(userMessage, true);
+            userInput.value = '';
+
+            sendButton.disabled = true;
+            userInput.disabled = true;
+            
+            const placeholder = addMessage('Anura is typing...', false); 
+
+            try {
+                const botMessage = await generateResponse(userMessage);
+                
+                // Replace the placeholder with the final response
+                chatMessages.removeChild(chatMessages.lastChild); 
+                addMessage(botMessage, false);
+
+            } catch (error) {
+                chatMessages.removeChild(chatMessages.lastChild); 
+                addMessage('Sorry, the AI service is currently unavailable. Please check your API key.', false);
+            } finally {
+                sendButton.disabled = false;
+                userInput.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // --- Event Listeners ---
+        sendButton.addEventListener('click', handleUserInput);
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleUserInput();
+            }
+        });
+
+        // Initial welcome message
+        addMessage('Hello! I am the Anura AI Assistant. I can help you with career questions, tech concepts, or code advice.', false);
+
+    </script>
+</body>
+</html>

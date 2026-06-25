@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anura AI Quiz Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- ANURA RADIANT LIGHT THEME COLORS (Standardized) --- */
+        :root {
+            --bg-dark: #aa83e9;        /* Light Purple/Violet */
+            --bg-card: #e1cef4;        /* Very Light Lavender */
+            --primary-purple: #8a2be2; /* Blue Violet (Accent/Button) */
+            --primary-hover: #6a1aab;  /* Darker Accent */
+            --text-light: #454141;     /* Dark Grey Text */
+            --text-muted: #353434;     /* Very Dark Grey Text */
+            --input-bg-light: #ffffff;
+            --error-red: #ff6347;
+            --success-green: #38c172;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 35%, var(--bg-dark) 100%);
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Use flex column to stack header and content */
+        }
+
+        /* --- HEADER STYLES --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.9); /* Light background for contrast */
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+        .back-button {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: var(--primary-hover);
+        }
+        /* --- END HEADER STYLES --- */
+
+        .main-content {
+             flex-grow: 1; /* Allow content to fill space */
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             width: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.2); 
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            margin: 20px;
+            color: var(--text-muted); /* Dark text color for the container */
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-purple);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px rgba(138, 43, 226, 0.2); 
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-muted); 
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 12px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--primary-purple);
+            border-radius: 8px;
+            background-color: var(--input-bg-light);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--primary-hover);
+            box-shadow: 0 0 8px rgba(138, 43, 226, 0.5);
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            display: inline-block; 
+            width: 300px; 
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            background-color: var(--primary-purple);
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.4);
+        }
+        
+        button:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #555555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Quiz Content */
+        .question { 
+            margin-top: 25px; 
+            padding: 20px; 
+            background-color: rgba(255, 255, 255, 0.8); /* Closer to white */
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 10px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .question p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-muted); 
+        }
+
+        .option { 
+            display: block; 
+            margin: 10px 0; 
+            padding: 10px;
+            cursor: pointer; 
+            border-radius: 5px;
+            background-color: var(--input-bg-light); 
+            color: var(--text-muted); 
+            transition: background-color 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #f0f0f0; 
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 10px;
+            width: auto;
+            accent-color: var(--primary-purple);
+        }
+
+        .answer { 
+            margin-top: 15px; 
+            font-weight: 600; 
+            color: var(--success-green); 
+            border-top: 1px dashed #cccccc; 
+            padding-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        #loading, #error { 
+            font-weight: 600;
+            text-align: center;
+        }
+        #loading { color: var(--primary-purple); animation: pulse 1s infinite alternate; }
+        #error { color: var(--error-red); }
+
+    </style>
+</head>
+<body>
+    
+    <!-- NEW HEADER FOR NAVIGATION -->
+    <header>
+        <a href="/dashboard" class="logo">Anura | Quiz Generator</a>
+        <a href="/dashboard" class="back-button">← Back to Dashboard</a>
+    </header>
+    
+    <div class="main-content">
+        <div class="container">
+            <h1>✨ Anura AI Quiz Generator</h1>
+            
+            <label for="topicInput">Quiz Topic:</label>
+            <input type="text" id="topicInput" placeholder="Enter a topic (e.g., Quantum Physics or Roman History)">
+            
+            <label for="numQuestionsInput">Number of Questions (3-30):</label>
+            <input type="number" id="numQuestionsInput" value="10" min="3" max="30">
+
+            <center><button id="generateBtn" onclick="generateQuiz()">Generate Quiz</button></center> 
+            
+            <p id="loading" style="display: none;">Generating quiz, please wait...</p>
+            <p id="error" style="display: none;"></p>
+
+            <div id="quizContainer">
+                <!-- Quiz results will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // NOTE: Use the provided API Key if you want to test the generation
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent';
+        const API_KEY = ''; // Placeholder for your Gemini API key
+        
+        const topicInput = document.getElementById('topicInput');
+        const numQuestionsInput = document.getElementById('numQuestionsInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const quizContainer = document.getElementById('quizContainer');
+        const loadingMsg = document.getElementById('loading');
+        const errorMsg = document.getElementById('error');
+        
+        async function generateQuiz() {
+            const topic = topicInput.value.trim();
+            const numQuestions = numQuestionsInput.value.trim();
+            
+            if (!topic || numQuestions < 3 || numQuestions > 30) {
+                // Using a custom message box or alert for demonstration only
+                alert("Please enter a topic and a valid number of questions (3-30).");
+                return;
+            }
+
+            // UI state: disable button, show loading
+            generateBtn.disabled = true;
+            loadingMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+            quizContainer.innerHTML = '';
+            
+            // --- Prompt Engineering for Structured JSON Output ---
+            const systemPrompt = `You are an expert quiz generator. Your task is to generate a quiz of exactly ${numQuestions} questions on the topic of "${topic}". The output MUST be a valid JSON array of objects. Each object must have three keys: "question", "options" (an array of exactly 4 strings), and "answer" (the correct option string). DO NOT include any other text or markdown outside the JSON block.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: `Generate a quiz about: ${topic}.` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "question": { "type": "STRING", "description": "The quiz question text." },
+                                "options": { "type": "ARRAY", "items": { "type": "STRING" }, "description": "Exactly four possible answers." }
+                                // Removed "answer" from required schema for brevity, but it should be returned by the model
+                            },
+                            "required": ["question", "options"]
+                        }
+                    }
+                }
+            };
+
+            try {
+                // Fetch call 
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const rawData = await response.json();
+                
+                if (!response.ok || !rawData.candidates || rawData.candidates.length === 0) {
+                    throw new Error(rawData.error ? rawData.error.message : 'API returned an empty or invalid response.');
+                }
+                
+                // Extract and parse the JSON string from the response
+                const jsonString = rawData.candidates[0].content.parts[0].text;
+                const quizData = JSON.parse(jsonString);
+
+                if (quizData && quizData.length > 0) {
+                    renderQuiz(quizData);
+                } else {
+                    throw new Error('AI could not generate the quiz content.');
+                }
+
+            } catch (error) {
+                console.error('Quiz Generation Error:', error);
+                errorMsg.textContent = 'Error: Quiz generation failed. Ensure your API key is valid and the backend service is reachable.';
+                errorMsg.style.display = 'block';
+            } finally {
+                // UI state: re-enable button, hide loading
+                generateBtn.disabled = false;
+                loadingMsg.style.display = 'none';
+            }
+        }
+        
+        function renderQuiz(quiz) {
+            quiz.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                
+                // 1. Question Text
+                const qText = document.createElement('p');
+                qText.innerHTML = `<strong>Q${index + 1}:</strong> ${q.question}`;
+                questionElement.appendChild(qText);
+                
+                // 2. Options
+                q.options.forEach(option => {
+                    const label = document.createElement('label');
+                    label.className = 'option';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `q${index}`;
+                    input.value = option;
+                    
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(option));
+                    questionElement.appendChild(label);
+                });
+                
+                // 3. Answer for demonstration
+                const answerText = document.createElement('p');
+                answerText.className = 'answer';
+                // NOTE: We rely on the model returning q.answer even if not in the schema
+                answerText.textContent = `Correct Answer: ${q.answer || 'Not Available in this Demo'}`; 
+                questionElement.appendChild(answerText);
+                
+                quizContainer.appendChild(questionElement);
+            });
+        }
+    </script>
+</body>
+</html>
