@@ -43,3 +43,6 @@ ANURA is an intelligent career guidance platform designed to bridge the gap betw
 ```bash
 git clone [https://github.com/your-username/anura.git](https://github.com/your-username/anura.git)
 cd anura
+```
+### 2. How to run the project 
+C:\file_name>**npx nodemon src/index.js**
